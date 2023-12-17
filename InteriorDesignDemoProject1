@@ -1,0 +1,145 @@
+import tkinter as tk
+tk = tk.Tk()
+
+# set the title of application and the size of the main window
+tk.title("Interior Design Demo")
+tk.geometry("550x325")
+
+
+# configure the number of columns in the main window (2)
+tk.columnconfigure(0, weight=2, pad=5)
+tk.columnconfigure(1, weight=2, pad=5)
+
+from tkinter.ttk import Label
+
+
+# set up the text, size and font of the main label and set it to the first row of the app
+text1 = Label(tk, text="Interior Design Demo", font=('Arial', 18))
+text1.grid(row=0, column=0, columnspan=2, pady=25, padx=25)
+
+# create these variables and set them to be empty
+selected_item = ""
+selected_button = ""
+
+
+# function that runs when you click either the Business or Personal button
+def show_Options(option):
+# use global to access the variable we set earlier
+ global selected_item
+
+# if/else function to set variable values and set button states depending on what value (option)
+# was passed to this function
+
+# if nothing is selected, we execute the standard code
+if selected_item == "":
+    selected_item = option
+
+# if Personal is selected
+    if option == "P":
+     b2["state"] = "disabled"
+     b3["state"] = "normal"
+     b4["state"] = "normal"
+     b1["state"] = "active"
+# if Business is selected
+    else:
+     b1["state"] = "disabled"
+     b3["state"] = "normal"
+     b4["state"] = "normal"
+     b2["state"] = "active"
+# if something exists in the selected variable, it means we are going back and need to reset
+# the buttons to their beginning state and UNSET the selected_item variable
+else:
+ b1["state"] = "normal"
+ b2["state"] = "normal"
+ b3["state"] = "disabled"
+ b4["state"] = "disabled"
+selected_item = ""
+
+
+# function that runs to open a new window when the user chooses vivid or neutral color
+def show_colors(option):
+
+# get the global selected button variable and set it to empty global selected_button
+ selected_color = ""
+
+# check the option variables and set their values
+if option == "V":
+ selected_color = "Vivid"
+else:
+ selected_color = "Neutral"
+
+if selected_item == "P":
+ selected_button = "Personal"
+else:
+ selected_button = "Business"
+
+# create a new window object and set it's title to whatever the selected_button value is
+newwindow = Toplevel(tk)
+newwindow.title(selected_button)
+
+# create the colummn layout
+newwindow.columnconfigure(0, weight=1, pad=5)
+newwindow.columnconfigure(1, weight=1, pad=5)
+newwindow.columnconfigure(2, weight=1, pad=5)
+newwindow.columnconfigure(3, weight=1, pad=5)
+
+# sets the size of the secondary window
+newwindow.geometry("600x300")
+
+# depending on the combination of selected values, set the array of colors
+if selected_item == "P" and selected_color == "Vivid":
+ colors = ['#fffc40', '#ff2fa9', '#ff8172', '#36244f']
+if selected_item == "B" and selected_color == "Vivid":
+ colors = ['#471337', '#b13254', '#ff5349', '#ff7249']
+if selected_item == "P" and selected_color == "Neutral":
+ colors = ['#f8cd82', '#f65b74', '#f72078', '#0df7db']
+if selected_item == "B" and selected_color == "Neutral":
+ colors = ['#4f6a8f', '#88a2bc', '#f0dbb0', '#efb680']
+
+# set size of blocks
+block_width = 50
+block_height = 300
+
+# create the four color blocks and assign the colors and sizes to them
+box = Frame(newwindow, bg=colors[0], width=block_width,
+height=block_height)
+box2 = Frame(newwindow, bg=colors[1], width=block_width,
+height=block_height)
+box3 = Frame(newwindow, bg=colors[2], width=block_width,
+height=block_height)
+box4 = Frame(newwindow, bg=colors[3], width=block_width,
+height=block_height)
+
+# create the label
+text2 = Label(newwindow, text=selected_button + " / " + selected_color
++ " Palette")
+
+# push everything we have created into the grid layout
+text2.grid(row=0, column=0, columnspan=4, pady=25, padx=25)
+box.grid(row=1, column=0, sticky=EW)
+box2.grid(row=1, column=1, sticky=EW)
+box3.grid(row=1, column=2, sticky=EW)
+box4.grid(row=1, column=3, sticky=EW)
+
+# create the main buttons on the first window
+b1 = Button(tk, text="Personal", command=lambda: show_options('P'))
+b2 = Button(tk, text="Business", command=lambda: show_options('B'))
+b3 = Button(tk, text="Vivid", command=lambda: show_colors('V'))
+b4 = Button(tk, text="Neutral", command=lambda: show_colors('N'))
+
+# disable the secondary buttons when the app is launched
+b3["state"] = "disabled"
+b4["state"] = "disabled"
+
+# add the exit button
+exit_button = Button(tk, text='Exit', command=lambda: tk.quit())
+
+# add the main buttons to the first window
+b1.grid(row=1, column=0, sticky=EW, pady=10, padx=25)
+b2.grid(row=1, column=1, sticky=EW, pady=10, padx=25)
+b3.grid(row=2, column=0, sticky=EW, pady=0, padx=10)
+b4.grid(row=2, column=1, sticky=EW, pady=0, padx=10)
+exit_button.grid(row=4, column=0, columnspan=2, padx=30, pady=30)
+
+# start the main loop
+tk.mainloop()
